@@ -26,8 +26,8 @@ animation:bgMove 15s ease infinite alternate;
 position:fixed;
 font-size:22px;
 pointer-events:none;
-opacity:.7;
-animation:fall 6s linear forwards;
+opacity:.9;
+animation:fall linear forwards;
 z-index:0;
 }
 @keyframes fall{
@@ -152,7 +152,7 @@ door.classList.add("open");
 setTimeout(()=>show(1),700);
 };
 
-/* scene control */
+/* scenes */
 function show(n){
 document.querySelectorAll(".card").forEach(c=>c.classList.remove("show"));
 document.getElementById("scene"+n).classList.add("show");
@@ -163,7 +163,7 @@ function next(n){
 show(n);
 }
 
-/* dialogue lines */
+/* dialogue animation */
 function showDialogue(){
 const lines=[
 "Kehte hain Ki....",
@@ -184,7 +184,7 @@ d.appendChild(div);
 });
 }
 
-/* NO button full screen */
+/* NO button move */
 const noBtn=document.getElementById("noBtn");
 function moveNo(){
 noBtn.style.position="fixed";
@@ -194,12 +194,40 @@ noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
 noBtn.addEventListener("mouseenter",moveNo);
 noBtn.addEventListener("click",moveNo);
 
-/* limited emojis */
+/* HEART RAIN FINAL */
+function yesClick(){
+
+let count=0;
+
+const interval=setInterval(()=>{
+
+for(let i=0;i<8;i++){
+let heart=document.createElement("div");
+heart.className="emoji";
+heart.innerText=["💖","❤️","💕","💗","💓","💞","💘"]
+[Math.floor(Math.random()*7)];
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(20+Math.random()*30)+"px";
+heart.style.animationDuration=(3+Math.random()*3)+"s";
+
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+}
+
+count++;
+if(count>25) clearInterval(interval);
+
+},150);
+
+}
+
+/* light background emojis */
 setInterval(()=>{
-if(document.querySelectorAll('.emoji').length>8)return;
+if(document.querySelectorAll('.emoji').length>10)return;
 let e=document.createElement("div");
 e.className="emoji";
-e.innerText=["💖","✨","🌸"][Math.floor(Math.random()*3)];
+e.innerText=["✨","🌸","💖"][Math.floor(Math.random()*3)];
 e.style.left=Math.random()*100+"vw";
 document.body.appendChild(e);
 setTimeout(()=>e.remove(),6000);
