@@ -21,12 +21,13 @@ animation:bgMove 15s ease infinite alternate;
 100%{background-position:100% 50%}
 }
 
-/* emoji rain */
+/* emoji background */
 .emoji{
 position:fixed;
-font-size:24px;
-animation:fall linear infinite;
+font-size:22px;
 pointer-events:none;
+opacity:.7;
+animation:fall 6s linear forwards;
 z-index:0;
 }
 @keyframes fall{
@@ -36,18 +37,15 @@ z-index:0;
 
 /* door */
 .door{
-width:160px;
-height:240px;
+width:160px;height:240px;
 background:#8b4513;
 border-radius:15px;
 position:absolute;
-top:50%;
-left:50%;
+top:50%;left:50%;
 transform:translate(-50%,-50%);
 cursor:pointer;
-box-shadow:0 10px 30px rgba(0,0,0,.3);
 transition:.8s;
-z-index:30;
+z-index:10;
 }
 .door.open{
 transform:translate(-50%,-50%) rotateY(85deg);
@@ -57,8 +55,7 @@ opacity:0;
 /* card */
 .card{
 position:absolute;
-top:50%;
-left:50%;
+top:50%;left:50%;
 transform:translate(-50%,-50%) scale(.85);
 opacity:0;
 padding:40px;
@@ -68,25 +65,19 @@ text-align:center;
 background:rgba(255,255,255,.25);
 backdrop-filter:blur(18px);
 border-radius:22px;
-box-shadow:0 0 60px rgba(255,255,255,.35);
 transition:.6s ease;
 z-index:20;
 }
-
 .card.show{
 opacity:1;
 transform:translate(-50%,-50%) scale(1);
 }
 
-/* popup lines */
 .line{
 opacity:0;
-transform:translateY(20px);
-animation:lineEnter .6s forwards;
+animation:fade .6s forwards;
 }
-@keyframes lineEnter{
-to{opacity:1;transform:translateY(0)}
-}
+@keyframes fade{to{opacity:1}}
 
 button{
 margin-top:20px;
@@ -98,15 +89,13 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* gift */
 .gift{
 font-size:90px;
 cursor:pointer;
-animation:float 3s ease-in-out infinite;
+animation:float 3s infinite ease-in-out;
 }
 @keyframes float{
-0%,100%{transform:translateY(0)}
-50%{transform:translateY(-14px)}
+50%{transform:translateY(-12px)}
 }
 </style>
 </head>
@@ -153,14 +142,12 @@ Dosti Karogi 🤌🎀
 
 <script>
 
-/* DOOR */
 const door=document.getElementById("door");
 door.onclick=()=>{
 door.classList.add("open");
 setTimeout(()=>show(1),700);
 };
 
-/* scenes */
 function show(n){
 document.getElementById("scene"+n).classList.add("show");
 if(n===3) showDialogue();
@@ -171,7 +158,6 @@ document.querySelectorAll(".card").forEach(c=>c.classList.remove("show"));
 show(n);
 }
 
-/* SRK dialogue line by line */
 function showDialogue(){
 const lines=[
 "Kehte hain Ki....",
@@ -180,56 +166,41 @@ const lines=[
 "Tumse milaane ki Koshish Main lag jaati hai"
 ];
 
-const container=document.getElementById("dialogue");
-container.innerHTML="";
-
-lines.forEach((text,i)=>{
+const d=document.getElementById("dialogue");
+d.innerHTML="";
+lines.forEach((t,i)=>{
 setTimeout(()=>{
 let div=document.createElement("div");
 div.className="line";
-div.innerText=text;
-container.appendChild(div);
+div.innerText=t;
+d.appendChild(div);
 },i*600);
 });
 }
 
-/* NO button full screen move */
 const noBtn=document.getElementById("noBtn");
-
 function moveNo(){
-const maxX=window.innerWidth-noBtn.offsetWidth;
-const maxY=window.innerHeight-noBtn.offsetHeight;
-
 noBtn.style.position="fixed";
-noBtn.style.left=Math.random()*maxX+"px";
-noBtn.style.top=Math.random()*maxY+"px";
+noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
+noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
 }
-
 noBtn.addEventListener("mouseenter",moveNo);
 noBtn.addEventListener("click",moveNo);
 
-/* hearts */
 function yesClick(){
-for(let i=0;i<30;i++){
-let e=document.createElement("div");
-e.className="emoji";
-e.innerText="💖";
-e.style.left=Math.random()*100+"vw";
-e.style.animationDuration=(3+Math.random()*3)+"s";
-document.body.appendChild(e);
-}
+alert("😊");
 }
 
-/* emoji rain */
+/* limited emojis */
 setInterval(()=>{
+if(document.querySelectorAll('.emoji').length>10)return;
 let e=document.createElement("div");
 e.className="emoji";
-e.innerText=["💖","✨","🌸","⭐"][Math.floor(Math.random()*4)];
+e.innerText=["💖","✨","🌸"][Math.floor(Math.random()*3)];
 e.style.left=Math.random()*100+"vw";
-e.style.animationDuration=(5+Math.random()*5)+"s";
 document.body.appendChild(e);
-setTimeout(()=>e.remove(),8000);
-},700);
+setTimeout(()=>e.remove(),6000);
+},1500);
 
 </script>
 
