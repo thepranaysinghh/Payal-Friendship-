@@ -27,54 +27,11 @@ position:fixed;
 font-size:24px;
 animation:fall linear infinite;
 pointer-events:none;
+z-index:1;
 }
 @keyframes fall{
 0%{transform:translateY(-10vh)}
 100%{transform:translateY(110vh)}
-}
-
-/* glass card */
-.card{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%) scale(.8);
-opacity:0;
-padding:40px;
-width:85%;
-max-width:500px;
-text-align:center;
-background:rgba(255,255,255,.2);
-backdrop-filter:blur(18px);
-border-radius:22px;
-box-shadow:0 0 60px rgba(255,255,255,.35);
-transition:.6s ease;
-}
-
-.card.show{
-opacity:1;
-transform:translate(-50%,-50%) scale(1);
-}
-
-/* popup lines */
-.line{
-opacity:0;
-transform:translateY(20px);
-animation:lineEnter .6s forwards;
-}
-
-@keyframes lineEnter{
-to{opacity:1;transform:translateY(0)}
-}
-
-button{
-margin-top:20px;
-padding:12px 28px;
-border:none;
-border-radius:20px;
-background:rgba(255,255,255,.5);
-font-weight:bold;
-cursor:pointer;
 }
 
 /* door */
@@ -90,10 +47,55 @@ transform:translate(-50%,-50%);
 cursor:pointer;
 box-shadow:0 10px 30px rgba(0,0,0,.3);
 transition:.8s;
+z-index:10;
 }
 .door.open{
 transform:translate(-50%,-50%) rotateY(85deg);
 opacity:0;
+}
+
+/* card */
+.card{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(.8);
+opacity:0;
+padding:40px;
+width:85%;
+max-width:500px;
+text-align:center;
+background:rgba(255,255,255,.2);
+backdrop-filter:blur(18px);
+border-radius:22px;
+box-shadow:0 0 60px rgba(255,255,255,.35);
+transition:.6s ease;
+z-index:5;
+}
+
+.card.show{
+opacity:1;
+transform:translate(-50%,-50%) scale(1);
+}
+
+/* popup lines */
+.line{
+opacity:0;
+transform:translateY(20px);
+animation:lineEnter .6s forwards;
+}
+@keyframes lineEnter{
+to{opacity:1;transform:translateY(0)}
+}
+
+button{
+margin-top:20px;
+padding:12px 28px;
+border:none;
+border-radius:20px;
+background:rgba(255,255,255,.5);
+font-weight:bold;
+cursor:pointer;
 }
 
 /* gift */
@@ -151,12 +153,14 @@ Dosti Karogi 🤌🎀
 
 <script>
 
+/* DOOR */
 const door=document.getElementById("door");
 door.onclick=()=>{
 door.classList.add("open");
 setTimeout(()=>show(1),700);
 };
 
+/* scenes */
 function show(n){
 document.getElementById("scene"+n).classList.add("show");
 if(n===3) showDialogue();
@@ -167,7 +171,7 @@ document.querySelectorAll(".card").forEach(c=>c.classList.remove("show"));
 show(n);
 }
 
-/* LINE BY LINE POPUP */
+/* SRK dialogue line by line */
 function showDialogue(){
 const lines=[
 "Kehte hain Ki....",
@@ -189,11 +193,8 @@ container.appendChild(div);
 });
 }
 
-/* NO BUTTON FULL SCREEN MOVE */
+/* NO button full screen */
 const noBtn=document.getElementById("noBtn");
-
-noBtn.addEventListener("mouseenter",moveNo);
-noBtn.addEventListener("click",moveNo);
 
 function moveNo(){
 const maxX=window.innerWidth-noBtn.offsetWidth;
@@ -203,6 +204,9 @@ noBtn.style.position="fixed";
 noBtn.style.left=Math.random()*maxX+"px";
 noBtn.style.top=Math.random()*maxY+"px";
 }
+
+noBtn.addEventListener("mouseenter",moveNo);
+noBtn.addEventListener("click",moveNo);
 
 /* hearts */
 function yesClick(){
