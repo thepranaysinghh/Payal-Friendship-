@@ -54,10 +54,10 @@ opacity:0;
 
 /* card */
 .card{
+display:none;
 position:absolute;
 top:50%;left:50%;
-transform:translate(-50%,-50%) scale(.85);
-opacity:0;
+transform:translate(-50%,-50%) scale(.9);
 padding:40px;
 width:85%;
 max-width:500px;
@@ -65,14 +65,16 @@ text-align:center;
 background:rgba(255,255,255,.25);
 backdrop-filter:blur(18px);
 border-radius:22px;
-transition:.6s ease;
+box-shadow:0 0 60px rgba(255,255,255,.35);
+transition:.5s ease;
 z-index:20;
 }
+
 .card.show{
-opacity:1;
-transform:translate(-50%,-50%) scale(1);
+display:block;
 }
 
+/* popup lines */
 .line{
 opacity:0;
 animation:fade .6s forwards;
@@ -89,6 +91,7 @@ font-weight:bold;
 cursor:pointer;
 }
 
+/* gift */
 .gift{
 font-size:90px;
 cursor:pointer;
@@ -142,22 +145,25 @@ Dosti Karogi 🤌🎀
 
 <script>
 
+/* door */
 const door=document.getElementById("door");
 door.onclick=()=>{
 door.classList.add("open");
 setTimeout(()=>show(1),700);
 };
 
+/* scene control */
 function show(n){
+document.querySelectorAll(".card").forEach(c=>c.classList.remove("show"));
 document.getElementById("scene"+n).classList.add("show");
 if(n===3) showDialogue();
 }
 
 function next(n){
-document.querySelectorAll(".card").forEach(c=>c.classList.remove("show"));
 show(n);
 }
 
+/* dialogue lines */
 function showDialogue(){
 const lines=[
 "Kehte hain Ki....",
@@ -178,6 +184,7 @@ d.appendChild(div);
 });
 }
 
+/* NO button full screen */
 const noBtn=document.getElementById("noBtn");
 function moveNo(){
 noBtn.style.position="fixed";
@@ -187,13 +194,9 @@ noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
 noBtn.addEventListener("mouseenter",moveNo);
 noBtn.addEventListener("click",moveNo);
 
-function yesClick(){
-alert("😊");
-}
-
 /* limited emojis */
 setInterval(()=>{
-if(document.querySelectorAll('.emoji').length>10)return;
+if(document.querySelectorAll('.emoji').length>8)return;
 let e=document.createElement("div");
 e.className="emoji";
 e.innerText=["💖","✨","🌸"][Math.floor(Math.random()*3)];
