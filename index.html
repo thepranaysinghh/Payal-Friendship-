@@ -12,7 +12,8 @@ body{
 height:100vh;
 overflow:hidden;
 background:linear-gradient(135deg,#ff9ad5,#8aa7ff);
-animation:bgMove 15s infinite alternate ease-in-out;
+background-size:200% 200%;
+animation:bgMove 15s ease infinite alternate;
 }
 
 @keyframes bgMove{
@@ -25,9 +26,8 @@ animation:bgMove 15s infinite alternate ease-in-out;
 position:fixed;
 font-size:24px;
 animation:fall linear infinite;
-opacity:.8;
+pointer-events:none;
 }
-
 @keyframes fall{
 0%{transform:translateY(-10vh)}
 100%{transform:translateY(110vh)}
@@ -41,14 +41,14 @@ left:50%;
 transform:translate(-50%,-50%) scale(.8);
 opacity:0;
 padding:40px;
-width:80%;
+width:85%;
 max-width:500px;
 text-align:center;
 background:rgba(255,255,255,.2);
-backdrop-filter:blur(15px);
-border-radius:20px;
-box-shadow:0 0 40px rgba(255,255,255,.3);
-transition:.5s;
+backdrop-filter:blur(18px);
+border-radius:22px;
+box-shadow:0 0 60px rgba(255,255,255,.35);
+transition:.6s ease;
 }
 
 .card.show{
@@ -56,13 +56,23 @@ opacity:1;
 transform:translate(-50%,-50%) scale(1);
 }
 
-/* button */
+/* popup lines */
+.line{
+opacity:0;
+transform:translateY(20px);
+animation:lineEnter .6s forwards;
+}
+
+@keyframes lineEnter{
+to{opacity:1;transform:translateY(0)}
+}
+
 button{
 margin-top:20px;
 padding:12px 28px;
 border:none;
 border-radius:20px;
-background:rgba(255,255,255,.4);
+background:rgba(255,255,255,.5);
 font-weight:bold;
 cursor:pointer;
 }
@@ -79,24 +89,22 @@ left:50%;
 transform:translate(-50%,-50%);
 cursor:pointer;
 box-shadow:0 10px 30px rgba(0,0,0,.3);
-transition:.7s;
+transition:.8s;
 }
-
 .door.open{
-transform:translate(-50%,-50%) rotateY(80deg);
+transform:translate(-50%,-50%) rotateY(85deg);
 opacity:0;
 }
 
 /* gift */
 .gift{
-font-size:80px;
-animation:float 3s infinite ease-in-out;
+font-size:90px;
 cursor:pointer;
+animation:float 3s ease-in-out infinite;
 }
-
 @keyframes float{
 0%,100%{transform:translateY(0)}
-50%{transform:translateY(-12px)}
+50%{transform:translateY(-14px)}
 }
 </style>
 </head>
@@ -116,12 +124,7 @@ cursor:pointer;
 </div>
 
 <div class="card" id="scene3">
-<h2>
-Kehte hain Ki....<br><br>
-Kisi Chiz ko Shiddat se Chaho!<br><br>
-Toh poori Qayanat use...<br><br>
-Tumse milaane ki Koshish Main lag jaati hai
-</h2>
+<h2 id="dialogue"></h2>
 <button onclick="next(4)">Tap to know ki kon ho tum</button>
 </div>
 
@@ -148,16 +151,15 @@ Dosti Karogi 🤌🎀
 
 <script>
 
-/* door open */
 const door=document.getElementById("door");
 door.onclick=()=>{
 door.classList.add("open");
-setTimeout(()=>show(1),600);
-}
+setTimeout(()=>show(1),700);
+};
 
-/* scenes */
 function show(n){
 document.getElementById("scene"+n).classList.add("show");
+if(n===3) showDialogue();
 }
 
 function next(n){
@@ -165,19 +167,46 @@ document.querySelectorAll(".card").forEach(c=>c.classList.remove("show"));
 show(n);
 }
 
-/* NO button move anywhere */
+/* LINE BY LINE POPUP */
+function showDialogue(){
+const lines=[
+"Kehte hain Ki....",
+"Kisi Chiz ko Shiddat se Chaho!",
+"Toh poori Qayanat use...",
+"Tumse milaane ki Koshish Main lag jaati hai"
+];
+
+const container=document.getElementById("dialogue");
+container.innerHTML="";
+
+lines.forEach((text,i)=>{
+setTimeout(()=>{
+let div=document.createElement("div");
+div.className="line";
+div.innerText=text;
+container.appendChild(div);
+},i*600);
+});
+}
+
+/* NO BUTTON FULL SCREEN MOVE */
 const noBtn=document.getElementById("noBtn");
-noBtn.addEventListener("mouseenter",()=>{
+
+noBtn.addEventListener("mouseenter",moveNo);
+noBtn.addEventListener("click",moveNo);
+
+function moveNo(){
 const maxX=window.innerWidth-noBtn.offsetWidth;
 const maxY=window.innerHeight-noBtn.offsetHeight;
+
 noBtn.style.position="fixed";
 noBtn.style.left=Math.random()*maxX+"px";
 noBtn.style.top=Math.random()*maxY+"px";
-});
+}
 
-/* hearts burst */
+/* hearts */
 function yesClick(){
-for(let i=0;i<25;i++){
+for(let i=0;i<30;i++){
 let e=document.createElement("div");
 e.className="emoji";
 e.innerText="💖";
@@ -187,7 +216,7 @@ document.body.appendChild(e);
 }
 }
 
-/* background emojis */
+/* emoji rain */
 setInterval(()=>{
 let e=document.createElement("div");
 e.className="emoji";
